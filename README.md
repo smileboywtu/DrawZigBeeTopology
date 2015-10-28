@@ -14,6 +14,16 @@ every relation in the network just send four bytes to this program:
 
 this program just get the real short address in the network and draw the relation ship using the graphviz.
 
+Work Flow
+=========
+![Alt text](http://g.gravizo.com/g?
+digraph workflow {
+	"uart" -> "view"
+	"uart" -> "control"
+	"control" -> "view"[label="queue"]
+	{rank=same; "view", "control":}
+}) 
+
 Demon
 =====
 ![Alt text](http://g.gravizo.com/g?
