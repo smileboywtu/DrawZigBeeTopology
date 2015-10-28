@@ -8,23 +8,21 @@ from graphviz import Digraph
 
 share_queue = Queue()
 
+def update_label(label):
+    "use the timer to update the label image"
+    while not share_queue.empty():
+        image = share_queue.get()
+        label.configure(image=image)
+        label.image = image
+        share_queue.task_done()
+
 def init_graph():
     "init the graph and image panel"
     dot = Digraph()
     dot.name = "topology"
     dot.format = "gif"
     dot.filename = "zigbee_topology"
-    global graph_handler
-    graph_handler = dot
-
-def update_image_label(label):
-    "use the timer to update the label image"
-    global share_queue
-    while not share_queue.empty():
-        image = share_queue.get()
-        label.configure(image=image)
-        label.image = image
-        share_queue.task_done()
+    return dot
 
 def init_view():
     "init a window"
@@ -39,25 +37,16 @@ def init_view():
     text_lable.pack(side="left")
     image_lable.pack(side="right")
 
-    root.after(100, update_image_label, (image_lable,))
+    root.after(100, update_label, (image_lable,))
     root.mainloop()
 
-def init_all():
-    "init all"
-    init_graph()
-    init_view()
-
-def add_new_edge(a, b):
+def add_new_edge(dot, a, b):
     "add new edge to the graph"
-    global graph_handler
-    if None == graph_handler:
-        init_all()
-
     if a == b:
-        graph_handler.node(a, "Coord")
+        dot.node(a, "Coord")
     else:
-        graph_handler.edge(a, b)
+        dot.edge(a, b)
 
-    global share_queue
-    raw_asc_image = graph_handler.pipe(format="gif")
-    share_queue.put(tk.PhotoImage(base64.b64encode(raw_asc_image)))
+    # add new image content
+    asc_image = dot.pipe(format="gif")
+    share_queue.put(tk.PhotoImage(base64.b64encode(asc_image)))
