@@ -14,6 +14,14 @@ every relation in the network just send four bytes to this program:
 
 this program just get the real short address in the network and draw the relation ship using the graphviz.
 
+Dependency
+==========
+
+* python 3.4+
+* pyserial
+* graphviz(with python module and system module installed)
+
+
 Work Flow
 =========
 ![Alt text](http://g.gravizo.com/g?
