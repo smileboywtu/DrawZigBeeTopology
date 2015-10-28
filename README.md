@@ -29,6 +29,7 @@ digraph workflow {
 	"uart" -> "view"
 	"uart" -> "control"
 	"control" -> "view"[label="queue"]
+	"view" -> "view"[label="timer"]
 	{rank=same; "view", "control":}
 }) 
 
