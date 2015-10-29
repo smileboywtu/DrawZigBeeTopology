@@ -1,4 +1,4 @@
- show the topology use graphviz
+# show the topology use graphviz
 # python 3.4
 
 import base64
@@ -52,4 +52,5 @@ def add_new_edge(dot, a, b):
 
     # add new image content
     asc_image = dot.pipe(format="gif")
-    share_queue.put(tk.PhotoImage(base64.b64encode(asc_image)))
+    image_data = tk.PhotoImage(data=base64.b64encode(asc_image))
+    share_queue.put(image_data)
