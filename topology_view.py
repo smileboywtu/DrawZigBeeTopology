@@ -1,4 +1,4 @@
-# show the topology use graphviz
+ show the topology use graphviz
 # python 3.4
 
 import base64
@@ -9,14 +9,15 @@ from graphviz import Digraph
 
 share_queue = Queue()
 
-def update_label(label):
+def update_label(root, label):
     "use the timer to update the label image"
     if not share_queue.empty():
         image = share_queue.get()
         label.configure(image=image)
         label.image = image
         share_queue.task_done()
-        print(time.hour, ":", time.minute, ":", time.second, " update the topology.")
+        print(time.hour(), ":", time.minute(), ":", time.second(), " update the topology.")
+    root.after(200, update_label, root, label)
 
 def init_graph():
     "init the graph and image panel"
@@ -39,7 +40,7 @@ def start_view():
     text_lable.pack(side="left")
     image_lable.pack(side="right")
 
-    root.after(100, update_label, (image_lable,))
+    root.after(200, update_label, root, image_lable)
     root.mainloop()
 
 def add_new_edge(dot, a, b):
