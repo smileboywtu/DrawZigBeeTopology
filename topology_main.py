@@ -5,7 +5,7 @@ import time
 import serial
 import threading
 from queue import Queue
-from topology_view import init_view
+from topology_view import start_view
 from topology_view import init_graph
 from topology_view import add_new_edge
 
@@ -18,6 +18,7 @@ def read_run(ser_io):
         self_address = hex(relation[1]) + hex(relation[0])[2:]
         parent_address = hex(relation[3]) + hex(relation[2])[2:]
         relation_queue.put((self_address, parent_address))
+        time.sleep(.2)
 
 def read_thread_def(uart):
     "read the topology information from the uart"
@@ -27,7 +28,6 @@ def read_thread_def(uart):
 
 def draw_run():
     "handle the data from the queue"
-    init_view()
     dot = init_graph()
     while 1:
         if not store.empty():
@@ -54,12 +54,10 @@ def main():
                         timeout=None) as uart:
         read_thread_def(uart)
         draw_thread_def()
-        while 1:
-            print("main program is running...")
-            is_exit = input("press esc to exit.")
-            if 27 == ord(is_exit):
-                print("uart closed.")
-                break
+
+        print("main program is running...")
+        start_view()
+        print("program exit.")
 
 if __name__ == '__main__':
     main()
