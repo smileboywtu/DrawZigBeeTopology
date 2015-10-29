@@ -4,17 +4,19 @@
 import base64
 import threading
 import tkinter as tk
+from datetime import time
 from graphviz import Digraph
 
 share_queue = Queue()
 
 def update_label(label):
     "use the timer to update the label image"
-    while not share_queue.empty():
+    if not share_queue.empty():
         image = share_queue.get()
         label.configure(image=image)
         label.image = image
         share_queue.task_done()
+        print(time.hour, ":", time.minute, ":", time.second, " update the topology.")
 
 def init_graph():
     "init the graph and image panel"
@@ -24,7 +26,7 @@ def init_graph():
     dot.filename = "zigbee_topology"
     return dot
 
-def init_view():
+def start_view():
     "init a window"
     root = tk.Tk()
     root.title("ZigBee Network Topology")
